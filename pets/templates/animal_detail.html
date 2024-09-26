@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ animal.breed }} - {{ animal.age }} years old</h1>
+<img src="{{ animal.picture.url }}" alt="Picture of {{ animal.breed }}">
+<p>{{ animal.description }}</p>
+<p>Purebred: {{ animal.purebred }}</p>
+<p>Neutered: {{ animal.neutered }}</p>
+<p>Price: ${{ animal.price }}</p>
+<a href="{% url 'wishlist-add' animal.id %}">Add to Wishlist</a>
+{% endblock %}
+

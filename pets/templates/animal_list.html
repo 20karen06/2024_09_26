@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Search for Pets{% endblock %}
+
+{% block content %}
+  <h2>Search for Pets</h2>
+
+  <!-- Search Section -->
+  <form method="get" action="">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="id_name">Name:</label>
+          {{ form.name }}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="id_breed">Breed:</label>
+          {{ form.breed }}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="id_animal_type">Type:</label>
+          {{ form.animal_type }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="id_min_age">Min Age:</label>
+          {{ form.min_age }}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="id_max_age">Max Age:</label>
+          {{ form.max_age }}
+        </div>
+      </div>
+      <div class="col-md-4 align-self-end">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+
+  <h3>Results</h3>
+  <div class="row">
+    {% for animal in animals %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img src="{{ animal.image.url }}" class="card-img-top" alt="{{ animal.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ animal.name }}</h5>
+            <p class="card-text">Breed: {{ animal.breed }}</p>
+            <p class="card-text">Age: {{ animal.age }}</p>
+            <p class="card-text">Price: ${{ animal.price }}</p>
+            <a href="{% url 'animal-detail' animal.pk %}" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No animals found matching your search criteria.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination controls -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if animals.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1" aria-label="First">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ animals.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="First">&laquo;&laquo;</a>
+        </li>
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Previous">&laquo;</a>
+        </li>
+      {% endif %}
+
+      {% for page_num in animals.paginator.page_range %}
+        {% if animals.number == page_num %}
+          <li class="page-item active"><a class="page-link" href="#">{{ page_num }}</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if animals.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ animals.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ animals.paginator.num_pages }}" aria-label="Last">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Next">&raquo;</a>
+        </li>
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Last">&raquo;&raquo;</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock %}

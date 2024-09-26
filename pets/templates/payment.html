@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Complete Payment for {{ animal.breed }}</h1>
+<form action="{% url 'create-checkout-session' animal.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" id="checkout-button">Pay ${{ animal.price }}</button>
+</form>
+{% endblock %}
+
